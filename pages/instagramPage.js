@@ -7,9 +7,9 @@ export class Instagram {
         //this.page1 = page1
         this.instagramStreaming = page.locator('.int-card.card-Instagram.Streaming')
         this.instaStreamingHeading = page.locator('[class="ml-3"] strong')
-        this.connectBtn = page.getByRole('button', { name: 'Connect' })
+        this.connectBtn = page.locator('//*[@class="awd-btn-label" and text()="Connect"]')
        //this.allowBtn = page1.getByRole('button', { name: 'Allow', exact: true })
-        this.disconnectBtn = page.locator('//*[text()="Disconnect"]')
+        this.disconnectBtn = page.locator('[class="int-modal-sidebar fx fx-col"] >:last-child span')
         this.supportArticle = page.locator('[class="awd-link--sm awd-link__tertiary"]')
         this.closeIcon = page.locator(' [class="ml-3"]+[class="nostyle close-btn"]')
         //this.loginInstaUsername = page1.locator('//* [@class="_aa48"]//child::input [@class="_aa4b _add6 _ac4d"][@name="username"]')
@@ -18,11 +18,11 @@ export class Instagram {
         this.instaTitle = page.getByTitle('Login • Instagram')
         //this.saveInfo = page1.locator('[class="_acan _acap _acas _aj1-"]')
         this.instructions = page.locator('[class="awd-nav-item "]')
-        this.hastags = page.getByPlaceholder('#entrepreneur, #innovation')
+        this.hastags = page.locator('[class="awd-input mb-2"]')
         this.updateBtn = page.locator('//*[@class="awd-btn-label"][text()="Update"]')
         this.chatWithUs = page.locator('//*[@class="awd-btn-label"][text()="Chat with us"]')
         this.callUs = page.locator('//*[@class="awd-btn-label"][text()="Call us"]')
-        this.disconnectConfirm = page.locator('[class="awd-modal-footer"] [class="awd-btn awd-btn-primary awd-btn--sm ml-2 "]')
+        this.disconnectConfirm = page.locator('//*[@class="awd-modal-wrapper"]//span[text()="Disconnect"] ')
     }
     async toClickInstaStreaming() {
         await this.instagramStreaming.click();
@@ -37,11 +37,11 @@ export class Instagram {
         await this.connectBtn.click()
     }
     async toclickDisconnectBtn(){
+        await this.page.waitForSelector('[class="int-modal-sidebar fx fx-col"] >:last-child span')
         await this.disconnectBtn.click()
-        await this.page.waitForSelector('[class="awd-modal-footer"] [class="awd-btn awd-btn-primary awd-btn--sm ml-2 "]')
+        await this.page.waitForSelector('//*[@class="awd-modal-wrapper"]//span[text()="Disconnect"] ')
         await this.disconnectConfirm.click();
-        // await this.disconnectConfirm.waitFor({state:'hidden',timeout:3000})
-        await this.page.waitForLoadState('load')
+        console.log("pass disconnected")
     }
     async toCheckDisconnectBtn() {
         expect(await this.disconnectBtn).toBeVisible()
@@ -59,11 +59,9 @@ export class Instagram {
         await this.loginInstaUsername.fill(instaLogin.username)
         await this.loginInstaPassword.fill(instaLogin.password)
         await this.loginBtn.click()
-
     }
-
     async clickConnectAndSwitchToNewWindow() {
-        const page1Promise = this.page.waitForEvent('page')
+        const page1Promise = this.page.waitForEvent('popup')
         await this.connectBtn.click()
         const page1 = await page1Promise
          //console.log(page1.url())
@@ -96,23 +94,25 @@ export class Instagram {
         await this.instructions.click()
     }
     async hastagsUpdate(){
-       await this.hastags.fill(instaLogin.hastags)
+        await this.page.waitForSelector('[class="awd-input mb-2"]')
+        await this.hastags.fill(instaLogin.hastags)
     }
     async toClickUpdate(){
-        await this.hastagsUpdate();
         this.updateBtn.click();
         await this.page.waitForSelector('//*[@class="awd-btn-label"][text()="Update"]')
     }
 
     async toClickConnect(){
-        const check = this.disconnectBtn.isVisible()
-        if(!check){
+        if(await expect(this.disconnectBtn).toBeEnabled()){
+            console.log("need to connected")
             await this.clickConnectAndSwitchToNewWindow()
-        }else {
-        await this.toclickDisconnectBtn()
-        await this.clickConnectAndSwitchToNewWindow()
+        }else{
+            console.log("already in connected stage to be disconnected")
+            await this.toclickDisconnectBtn()
+            await this.clickConnectAndSwitchToNewWindow()
         }
     }
+   
     async toClickChatWithUs(){
        await this.chatWithUs.click()
     }

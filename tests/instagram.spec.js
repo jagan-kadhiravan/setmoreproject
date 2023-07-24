@@ -19,8 +19,6 @@ let instagram;
 // let page1;
 let logout;
 
-
-
 test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     // const context = await browser.newContext();
@@ -55,7 +53,6 @@ test.describe('To verify instagram Streaming', () => {
         async () => {
             // test.slow();
             await instagram.clickConnectAndSwitchToNewWindow(conf.instaLogin)
-
         })
     test('To verify if the instagram is integrated or not', async () => {
         await instagram.clickConnectAndSwitchToNewWindow(conf.instaLogin)
@@ -66,7 +63,9 @@ test.describe('To verify instagram Streaming', () => {
         //test.slow();
         await instagram.toClickConnect(conf.instaLogin)
         await instagram.toClickInstructions()
+        await instagram.hastagsUpdate(conf.instaLogin)
         await instagram.toClickUpdate()
     });
+  
 
 })
