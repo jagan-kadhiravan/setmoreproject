@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const conf = require('../util/constant.js');
 import { LoginPage } from '../pages/loginPage.js';
 import { Selectdate } from '../pages/selectDatePage.js';

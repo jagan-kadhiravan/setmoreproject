@@ -1,20 +1,14 @@
-const { test, expect } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const conf = require('../util/constant.js');
 import { LoginPage } from '../pages/loginPage.js';
-import { Selectdate } from '../pages/selectDatePage.js';
-import { Service } from '../pages/appointmentPage.js';
 import { Integration } from '../pages/integrationPage.js';
-import { Teleport } from '../pages/teleportpages.js';
-import { Manage } from '../pages/managePage.js';
 import { Instagram } from '../pages/instagramPage.js';
 import { Logout } from '../pages/logout.js';
+import { Calender } from '../pages/calendarPage.js';
 let loginapp;
-let selectDate;
-let service;
+let calender
 let integration;
 let page;
-let teleport;
-let manage;
 let instagram;
 // let page1;
 let logout;
@@ -23,14 +17,10 @@ test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     // const context = await browser.newContext();
     // page1 = await context.newPage();
-
     loginapp = new LoginPage(page)
-    selectDate = new Selectdate(page)
-    service = new Service(page)
     integration = new Integration(page)
-    teleport = new Teleport(page)
-    manage = new Manage(page)
-    instagram = new Instagram(page)
+    calender = new Calender(page)
+    instagram = new Instagram(page,page1)
     logout = new Logout(page)
     await page.goto(conf.url)
     await loginapp.login(conf.validUser)
@@ -38,7 +28,6 @@ test.beforeAll(async ({ browser }) => {
     await integration.integrationModuleClick();
     await instagram.toClickInstaStreaming();
     await instagram.toCheckInstaStreamingHeading()
-    await page.waitForLoadState('load')
 })
 
 test.describe('To verify instagram Streaming', () => {
@@ -51,7 +40,6 @@ test.describe('To verify instagram Streaming', () => {
 
     test('To verify its allowing instagram login',
         async () => {
-            // test.slow();
             await instagram.clickConnectAndSwitchToNewWindow(conf.instaLogin)
         })
     test('To verify if the instagram is integrated or not', async () => {
@@ -59,13 +47,38 @@ test.describe('To verify instagram Streaming', () => {
         await instagram.toCheckInstaConnected()
     });
     test.only('To verify the hashatgs textbox after instagram integration', async () => {
-        // await instagram.clickConnectAndSwitchToNewWindow(conf.instaLogin)
         //test.slow();
         await instagram.toClickConnect(conf.instaLogin)
         await instagram.toClickInstructions()
         await instagram.hastagsUpdate(conf.instaLogin)
         await instagram.toClickUpdate()
+    })
+    test('To verify hashtags are upadated or not', async () => {
+        await instagram.toClickInstructions()
+        await instagram.hastagsUpdate(conf.instaLogin)
+        await instagram.toClickUpdate()
+        await instagram.toCheckHashtagUpdateMsg()
     });
-  
+    test('To verify if the appointment is booked ', async () => {
+        await calender.tocheckCustomerBookedVia()
+    })
 
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// test.use({ browserName: 'webkit' }); 

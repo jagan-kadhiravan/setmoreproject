@@ -19,6 +19,7 @@ export class Calender {
         this.toCheckDetailText = page.locator('#Detail')
         this.errorMsgGuest = page.locator('[data-testid="app-widget-guest-error"]')
         this.errorMsgService = page.locator('[class="awd-input-desc"]').nth(0)
+        this.CustomerBookedvia = page.getByTestId('app-widget-booking-source')
     }
     async toSelectDate() {
         await this.clickDate.click()
@@ -78,6 +79,16 @@ export class Calender {
         await this.ToCheckOnCreatedMetting.click();
     }
     async appoinmentContainerClick() {
-        this.appointmentContainer.click();
+        await this.appointmentContainer.click();
+    }
+    async tocheckCustomerBookedVia() {
+
+        const check = this.CustomerBookedvia.textContent();
+        if (check.isVisible()) {
+            expect(check).toBe('Booked from Custom staff booking page')
+            console.log("Appointment is Booked")
+        }else {
+            console.log("The appointment is not booked")
+        }
     }
 }
