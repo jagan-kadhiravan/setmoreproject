@@ -5,7 +5,7 @@ export class Instagram {
     this.page = page;
     this.instagramStreaming = page.locator(
       ".int-card.card-Instagram.Streaming"
-    );
+    );-[]
     this.instaStreamingHeading = page.locator('[class="ml-3"] strong');
     this.connectBtn = page.locator(
       '//*[@class="awd-btn-label" and text()="Connect"]'
@@ -57,7 +57,6 @@ export class Instagram {
       '//*[@class="awd-modal-wrapper"]//span[text()="Disconnect"] '
     );
     await this.disconnectConfirm.click();
-    console.log("pass disconnected");
   }
   async toCheckDisconnectBtn() {
     expect(await this.disconnectBtn).toBeVisible();

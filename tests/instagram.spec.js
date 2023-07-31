@@ -20,7 +20,7 @@ test.beforeAll(async ({ browser }) => {
     loginapp = new LoginPage(page)
     integration = new Integration(page)
     calender = new Calender(page)
-    instagram = new Instagram(page,page1)
+    instagram = new Instagram(page)
     logout = new Logout(page)
     await page.goto(conf.url)
     await loginapp.login(conf.validUser)
